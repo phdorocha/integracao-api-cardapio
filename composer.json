@@ -1,0 +1,22 @@
+{
+    "name": "phdorocha/integracao-api-cardapio",
+    "description": "Pacote para acessar a API de Integra\u0000\u0000o com o cardapio EasyRestaurante.app.br",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "role": "Developer",
+            "name": "Paulo Henrique Andrade",
+            "email": "phdorocha@gmail.com",
+            "homepage": "https://www.sidsolucoes.com/"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "PauloAndrade\\IntegracaoAPICardapio\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^7.0"
+    }
+}

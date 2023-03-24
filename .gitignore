@@ -1,0 +1,6 @@
+/vendor/
+/.idea
+composer.lock
+
+gitbut-integracao-api-cardapio
+gitbut-integracao-api-cardapio.pub

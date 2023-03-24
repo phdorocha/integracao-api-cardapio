@@ -1,5 +1,5 @@
 {
-    "name": "phdorocha/integracao-api-cardapio",
+    "name": "phdorocha/integracao-api-cardapio-v1",
     "description": "Pacote para acessar a API de Integra\u0000\u0000o com o cardapio EasyRestaurante.app.br",
     "type": "library",
     "license": "MIT",
@@ -13,7 +13,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "PauloAndrade\\IntegracaoAPICardapio\\": "src/"
+            "PauloAndrade\\IntegracaoAPICardapio-v1\\": "src/"
         }
     },
     "require": {

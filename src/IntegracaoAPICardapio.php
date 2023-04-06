@@ -2,10 +2,13 @@
 
 namespace PauloAndrade\IntegracaoAPICardapio;
 
+use DateInterval;
+use DateTime;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Message;
+use GuzzleHttp\Psr7\Request;
 
 class IntegracaoAPICardapio
 {
@@ -59,38 +62,60 @@ class IntegracaoAPICardapio
 
             return (array) json_decode($response->getBody()->getContents());
         } catch (ClientException $e) {
-            return $e;
+            return $this->parseResultClient($e);
         } catch (\Exception $e) {
             $response = $e->getMessage();
             return ['error' => $response];
         }
     }
+
     public function setToken(string $token)
     {
         $this->token = $token;
     }
 
-    public function updateExpiration($newDate)
+    public function updateExpiration($newDate, $cnpj)
     {
-        $options = $this->optionsRequest;
-        $options['headers']['Authorization'] = "Bearer {$this->token}";
-        $options['expiracao'] = $newDate;
+        $this->optionsRequest = [
+            'headers' => [
+                'Accept' => 'application/json'
+            ],
+        ];
+        $headers = [
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . $this->token
+        ];
+        $body = '{"expiracao": "' . $newDate . '"}';
 
         try {
-            $response = $this->client->request(
+            $request = new Request(
                 'PUT',
-                "/config/expiration",
-                $options
+                "api/configs/$cnpj/expiration",
+                $headers,
+                $body
             );
+            $response = $this->client->sendAsync($request)->wait();
 
             $statusCode = $response->getStatusCode();
             $result = json_decode($response->getBody()->getContents());
             return array('status' => $statusCode, 'response' => $result);
         } catch (ClientException $e) {
-            return $e->getMessage();
+            return $this->parseResultClient($e);
         } catch (\Exception $e) {
             $response = $e->getMessage();
-            return ['error' => "Falha ao atulizar o expiration: {$response}"];
+            return ['error' => "Falha ao atualizar o expiration: {$response}"];
         }
+    }
+
+    /**
+     * return resonse error
+     */
+    private function parseResultClient($result)
+    {
+        $statusCode = $result->getResponse()->getStatusCode();
+        $response = $result->getResponse()->getReasonPhrase();
+        $body = $result->getResponse()->getBody()->getContents();
+
+        return ['error' => $body, 'response' => $response, 'statusCode' => $statusCode];
     }
 }
